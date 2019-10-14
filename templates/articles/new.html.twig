@@ -3,13 +3,24 @@
 {% block title %}Créer un article{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Créer un nouvel article</h1>
+    {{ form_start(formArticle) }}
 
-<div class="example-wrapper">
-    <h1>Formulaire pour créer un nouvel article</h1>
-    <p>A compléter...</p>
-</div>
+    <div class="form-group">
+        <label for="">Titre</label>
+        {{ form_widget(formArticle.title) }}
+    </div>
+
+    <div class="form-group">
+        <label for="">Contenu</label>
+        {{ form_widget(formArticle.content) }}
+    </div>
+
+    <div class="form-group">
+        <label for="">Image</label>
+        {{ form_widget(formArticle.image) }}
+    </div>
+
+    {{ form_end(formArticle) }}
+
 {% endblock %}

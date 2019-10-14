@@ -3,7 +3,11 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
 
@@ -12,7 +16,7 @@ class ArticlesController extends AbstractController
     /**
      * @Route("/articles", name="articles")
      */
-    public function index(ArticleRepository $repo)
+public function index(ArticleRepository $repo)
     {
         $articles = $repo->findAll();
 
@@ -25,9 +29,33 @@ class ArticlesController extends AbstractController
     /**
      * @Route("/articles/new", name="newarticle")
      */
-    public function create()
+    public function create(Request $request, ObjectManager $manager)
     {
-        return $this->render('articles/new.html.twig');
+        $article = new Article();
+
+        $form = $this->createFormBuilder($article)
+                     ->add('title', TextType::class, [
+                        'attr' => [
+                            'placeholder' => "Titre de l'article",
+                            'class' => 'form-control'
+                        ]
+                     ])
+                     ->add('content', TextareaType::class, [
+                         'attr' => [
+                             'placeholder' => "Contenu de l'article",
+                             'class' => 'form-control'
+                         ]
+                     ])
+                     ->add('image', TextType::class, [
+                         'attr' => [
+                             'placeholder' => "Image de l'article",
+                             'class' => 'form-control'
+                         ]
+                     ])
+                     ->getForm();
+        return $this->render('articles/new.html.twig', [
+            'formArticle' => $form->createView()
+        ]);
     }
 
     /**
