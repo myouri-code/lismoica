@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Form\ArticleType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +18,7 @@ class ArticlesController extends AbstractController
     /**
      * @Route("/articles", name="articles")
      */
-public function index(ArticleRepository $repo)
+    public function index(ArticleRepository $repo)
     {
         $articles = $repo->findAll();
 
@@ -29,31 +31,54 @@ public function index(ArticleRepository $repo)
     /**
      * @Route("/articles/new", name="newarticle")
      */
-    public function create(Request $request, ObjectManager $manager)
+    public function create(Article $article = null, Request $request, ObjectManager $manager)
     {
-        $article = new Article();
+        if(!$article){
+            $article = new Article();
+        }
 
-        $form = $this->createFormBuilder($article)
-                     ->add('title', TextType::class, [
-                        'attr' => [
-                            'placeholder' => "Titre de l'article",
-                            'class' => 'form-control'
-                        ]
-                     ])
-                     ->add('content', TextareaType::class, [
-                         'attr' => [
-                             'placeholder' => "Contenu de l'article",
-                             'class' => 'form-control'
-                         ]
-                     ])
-                     ->add('image', TextType::class, [
-                         'attr' => [
-                             'placeholder' => "Image de l'article",
-                             'class' => 'form-control'
-                         ]
-                     ])
-                     ->getForm();
+        $form = $this->createForm(ArticleType::class, $article);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid())
+        {
+            if(!$article->getId()) {
+                $article->setCreatedAt(new \DateTime());
+            }
+
+            $manager->persist($article);
+            $manager->flush();
+
+            return $this->redirectToRoute('showarticle', ['id' => $article->getId()]);
+        }
+
         return $this->render('articles/new.html.twig', [
+            'formArticle' => $form->createView()
+        ]);
+    }
+
+    /**
+    * @Route("/articles/edit/{id}", name="editarticle")
+    */
+    public function edit(Article $article, Request $request, ObjectManager $manager)
+    {
+        if(!$article){
+            return $this->render('index.html.twig');
+        }
+
+        $form = $this->createForm(ArticleType::class, $article);
+
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $manager->persist($article);
+            $manager->flush();
+
+            return $this->redirectToRoute('showarticle', ['id' => $article->getId()]);
+        }
+
+        return $this->render('articles/edit.html.twig', [
             'formArticle' => $form->createView()
         ]);
     }
@@ -72,14 +97,6 @@ public function index(ArticleRepository $repo)
      * @Route("/article/delete/{id}", name="deletearticle")
      */
     public function delete($id)
-    {
-
-    }
-
-    /**
-     * @Route("/blog/edit/{id}", name="editarticle")
-     */
-    public function edit($id)
     {
 
     }
