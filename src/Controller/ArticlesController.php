@@ -63,10 +63,6 @@ class ArticlesController extends AbstractController
     */
     public function edit(Article $article, Request $request, ObjectManager $manager)
     {
-        if(!$article){
-            return $this->render('index.html.twig');
-        }
-
         $form = $this->createForm(ArticleType::class, $article);
 
         $form->handleRequest($request);
