@@ -16,17 +16,47 @@
             <div class="collapse navbar-collapse" id="navbarColor01">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('articles') }}">Articles <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{ path('articles') }}">Articles<span class="sr-only">(current)</span></a>
+                    </li>
+                    {# Buttons for existing Categories#}
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Code<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('newarticle') }}">Créer un article</a>
+                        <a class="nav-link" href="">Cinéma<span class="sr-only">(current)</span></a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Anime<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Musique<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Dessin<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Voyage<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">BD<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Manga<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Jeux Vidéos<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
 
+                <ul class="navbar-nav ml-auto">
                     {% if not app.user %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('security_login') }}">Connexion</a>
                     </li>
                     {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('newarticle') }}">Créer un article</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path('security_logout') }}">Deconnexion</a>
                     </li>
