@@ -110,12 +110,12 @@ class ArticlesController extends AbstractController
      */
     public function show_by_category(ArticleRepository $article_repo, CategoryRepository $categ_repo, $category_title){
 
-        $category_id = $categ_repo->findBy([
+        $category = $categ_repo->findOneBy([
             'title' => $category_title
         ]);
 
         $articles = $article_repo->findBy([
-            'category' => $category_id
+            'category' => $category
         ]);
 
         return $this->render('articles/show_by_categ', [
