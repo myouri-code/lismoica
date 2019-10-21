@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Entity\Comment;
+use App\Repository\CategoryRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
 
@@ -25,7 +25,6 @@ class ArticlesController extends AbstractController
         $articles = $repo->findAll();
 
         return $this->render('articles/index.html.twig', [
-            'controller_name' => 'ArticlesController',
             'articles' => $articles
         ]);
     }
@@ -103,6 +102,24 @@ class ArticlesController extends AbstractController
         return $this->render('articles/show.html.twig', [
             'article' => $article,
             'commentForm' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/articles/{category_title}",name="show_by_categ")
+     */
+    public function show_by_category(ArticleRepository $article_repo, CategoryRepository $categ_repo, $category_title){
+
+        $category_id = $categ_repo->findBy([
+            'title' => $category_title
+        ]);
+
+        $articles = $article_repo->findBy([
+            'category' => $category_id
+        ]);
+
+        return $this->render('articles/show_by_categ', [
+            'articles' =>$articles
         ]);
     }
 
