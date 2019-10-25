@@ -2,12 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Form\ArticleType;
 use App\Form\CommentType;
 use App\Entity\Comment;
 use App\Repository\CategoryRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +16,7 @@ use App\Repository\ArticleRepository;
 class ArticlesController extends AbstractController
 {
     /**
-     * @Route("/articles", name="articles")
+     * @Route("/articles@", name="articles")
      */
     public function index(ArticleRepository $repo)
     {
@@ -106,19 +104,19 @@ class ArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/articles/{category_title}",name="show_by_categ")
+     * @Route("/articles/{categoryTitle}",name="showByCateg")
      */
-    public function show_by_category(ArticleRepository $article_repo, CategoryRepository $categ_repo, $category_title){
+    public function showByCategory(ArticleRepository $articleRepo, CategoryRepository $categoryRepo, $categoryTitle){
 
-        $category = $categ_repo->findOneBy([
-            'title' => $category_title
+        $category = $categoryRepo->findOneBy([
+            'title' => $categoryTitle
         ]);
 
-        $articles = $article_repo->findBy([
+        $articles = $articleRepo->findBy([
             'category' => $category
         ]);
 
-        return $this->render('articles/show_by_categ', [
+        return $this->render('articles/showByCateg', [
             'articles' =>$articles
         ]);
     }
